@@ -38,11 +38,10 @@ exports.createCompany = async (req, res) => {
     const companyData = new Company(req.body);
     const company = await companyData.save();
 
-    res.status(200).json({ company: company });
+    res.status(200).json({ data: company });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
-
   }
 };
 
@@ -56,7 +55,7 @@ exports.getCompanyById = async (req, res) => {
         message: "Company not found."
       });
     }
-    res.status(200).json({ company: company });
+    res.status(200).json({ data: company });
   } catch (err) {
     res.status(500).json({
       message: err.message
@@ -74,7 +73,10 @@ exports.updateCompany = async (req, res) => {
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json({ company: updatedCompany });
+    if (!updatedCompany) {
+      return res.status(404).json({ message: "Company not found" });
+    }
+    res.status(200).json({ data: updatedCompany });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
