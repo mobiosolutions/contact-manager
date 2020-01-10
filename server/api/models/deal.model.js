@@ -36,8 +36,7 @@ const dealSchema = new Schema({
   },
   deal_owner_id: {
     type: mongoose.Schema.ObjectId,
-    ref: "User",
-    default: ""
+    ref: "User"
   },
   deal_value: {
     type: Number,
