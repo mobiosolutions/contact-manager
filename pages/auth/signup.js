@@ -15,219 +15,214 @@ import Slide from "@material-ui/core/Slide";
 import Gavel from "@material-ui/icons/Gavel";
 import VerifiedUserTwoTone from "@material-ui/icons/VerifiedUserTwoTone";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Link from "next/link"
+import Link from "next/link";
+import Grid from "@material-ui/core/Grid";
 
-import {signupUser} from "../../lib/auth";
-
+import { signupUser } from "../../lib/auth";
 
 function Transition(props) {
-
-    return <Slide direction="up" {...props} />
-
+  return <Slide direction="up" {...props} />;
 }
 
 class Signup extends React.Component {
-    state = {
-        name: '',
-        email: '',
-        password: '',
-        error: '',
-        createdUser: '',
-        openError: false,
-        openSuccess: false,
-        isLoading: false
-    };
+  state = {
+    name: "",
+    email: "",
+    password: "",
+    error: "",
+    createdUser: "",
+    openError: false,
+    openSuccess: false,
+    isLoading: false
+  };
 
-    handleClose = () => this.setState({
-        openError: false
-
+  handleClose = () =>
+    this.setState({
+      openError: false
     });
 
-    handleChange = event => {
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-        this.setState({ [event.target.name]: event.target.value })
+  handleSubmit = event => {
+    const { name, email, password } = this.state;
+    event.preventDefault();
 
-    }
+    const user = { name, email, password };
+    this.setState({ isLoading: true, error: "" });
 
-    handleSubmit = event => {
-        const {name , email , password} = this.state;
-        event.preventDefault();
+    signupUser(user)
+      .then(createdUser => {
+        this.setState({
+          createdUser,
+          error: "",
+          openSuccess: true,
+          isLoading: false
+        });
+      })
+      .catch(this.showError);
 
-        const user = { name, email, password };
-        this.setState({ isLoading:true , error: ''});
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-        signupUser(user)
-            .then( createdUser => {
-                this.setState({
-                    createdUser,
-                    error: "",
-                    openSuccess: true,
-                    isLoading: false
-                })
-            }).catch(this.showError);
+  showError = err => {
+    console.log("errr", err.response);
+    const error =
+      (err.response && err.response.data && err.response.data.message) ||
+      err.message;
+    this.setState({ error, openError: true, isLoading: false });
+  };
 
-        this.setState({ [event.target.name]: event.target.value })
+  render() {
+    const { classes } = this.props;
+    const {
+      error,
+      openError,
+      openSuccess,
+      createdUser,
+      isLoading
+    } = this.state;
 
-    }
+    return (
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <Gavel />
+          </Avatar>
 
-    showError = err => {
-        console.log('errr',err.response);
-        const error = err.response && err.response.data && err.response.data.message || err.message;
-        this.setState({ error, openError:true, isLoading:false });
+          <Typography variant="h5" component="h1">
+            Sign Up
+          </Typography>
+          <form onSubmit={this.handleSubmit} className={classes.form}>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="name"> Name </InputLabel>
+              <Input name="name" type="text" onChange={this.handleChange} />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="email"> Email </InputLabel>
+              <Input name="email" type="email" onChange={this.handleChange} />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password"> Password </InputLabel>
+              <Input
+                name="password"
+                type="password"
+                onChange={this.handleChange}
+              />
+            </FormControl>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              disabled={isLoading}
+              className={classes.submit}
+            >
+              {/*Sign up*/}
+              {isLoading ? "Signing up..." : "Sign up"}
+            </Button>
+            <Grid container className={classes.submit}>
+              {/* <Grid item xs>
+                <Link href="#">Forgot password?</Link>
+              </Grid> */}
+              <Grid item>
+                <Link href="/auth/login">
+                  <a>{"Already have an account? Sign in"}</a>
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
 
+          {/*{ Error snackbar}*/}
 
-    }
+          {error && (
+            <Snackbar
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right"
+              }}
+              open={openError}
+              onClose={this.handleClose}
+              autoHideDuration={6000}
+              message={<span className={classes.snack}> {error} </span>}
+            />
+          )}
+        </Paper>
 
-    render() {
-        const { classes } = this.props;
-        const { error , openError , openSuccess, createdUser , isLoading } = this.state;
-
-
-        return (
-            <div className={ classes.root }>
-                <Paper className={ classes.paper }>
-                    <Avatar className={ classes.avatar }>
-                        <Gavel/>
-
-                    </Avatar>
-
-                    <Typography variant="h5" component="h1">
-
-                        Sign Up
-
-                    </Typography>
-                    <form onSubmit={this.handleSubmit} className={ classes.form }>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="name"> Name </InputLabel>
-                            <Input
-                                name="name"
-                                type="text"
-                                onChange = { this.handleChange }
-                            />
-
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email"> Email </InputLabel>
-                            <Input
-                                name="email"
-                                type="email"
-                                onChange = { this.handleChange }
-                            />
-
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password"> Password </InputLabel>
-                            <Input
-                                name="password"
-                                type="password"
-                                onChange = { this.handleChange }
-                            />
-
-                        </FormControl>
-                        <Button
-                            type="submit" fullWidth
-                            variant="contained"
-                            color="primary"
-                            disabled={isLoading}
-                            className={ classes.submit }
-                        >
-                            {/*Sign up*/}
-                            { isLoading ? "Signing up..." : "Sign up"}
-                        </Button>
-
-                    </form>
-
-                    {/*{ Error snackbar}*/}
-
-                    { error &&    <Snackbar
-                        anchorOrigin={{
-                            vertical : 'bottom',
-                            horizontal : 'right'
-                        }}
-                        open={openError}
-                        onClose={this.handleClose}
-                        autoHideDuration={6000}
-                        message = {<span className={classes.snack}> { error } </span> }
-
-                    />}
-
-                </Paper>
-
-                <Dialog open={openSuccess}
-                        disableBackdropClick = {true}
-                        TransitionComponent = {Transition}
-                >
-                    <DialogTitle>
-                        <VerifiedUserTwoTone className={classes.icon} />
-                        New Account
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            User {createdUser.username} successfully created!
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color="primary" variant="contained">
-                            <Link href="login">
-                                <a className={classes.signinLink}> Sign in</a>
-
-                            </Link>
-                        </Button>
-                    </DialogActions>
-
-                </Dialog>
-
-            </div>
-        )
-    }
+        <Dialog
+          open={openSuccess}
+          disableBackdropClick={true}
+          TransitionComponent={Transition}
+        >
+          <DialogTitle>
+            <VerifiedUserTwoTone className={classes.icon} />
+            New Account
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              User {createdUser.username} successfully created!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" variant="contained">
+              <Link href="login">
+                <a className={classes.signinLink}> Sign in</a>
+              </Link>
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 }
 
 const styles = theme => ({
-    root: {
-        width: "auto",
-        display: "block",
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up("md")]: {
-            width: 400,
-            marginLeft: "auto",
-            marginRight: "auto"
-        }
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 8,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: theme.spacing.unit * 2
-    },
-    signinLink: {
-        textDecoration: "none",
-        color: "white"
-    },
-    avatar: {
-        margin: theme.spacing.unit,
-        backgroundColor: theme.palette.secondary.main
-    },
-    form: {
-        width: "100%",
-        marginTop: theme.spacing.unit
-    },
-    submit: {
-        marginTop: theme.spacing.unit * 2,
-        backgroundColor: '#1976d2',
-        "&:hover": {
-            background: "#2176d2"
-        }
-    },
-    snack: {
-        color: theme.palette.secondary.light
-    },
-    icon: {
-        padding: "0px 2px 2px 0px",
-        verticalAlign: "middle",
-        color: "green"
+  root: {
+    width: "auto",
+    display: "block",
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up("md")]: {
+      width: 400,
+      marginLeft: "auto",
+      marginRight: "auto"
     }
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: theme.spacing.unit * 2
+  },
+  signinLink: {
+    textDecoration: "none",
+    color: "white"
+  },
+  avatar: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing.unit
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 2
+    // backgroundColor: '#1976d2',
+    // "&:hover": {
+    //     background: "#2176d2"
+    // }
+  },
+  snack: {
+    color: theme.palette.secondary.light
+  },
+  icon: {
+    padding: "0px 2px 2px 0px",
+    verticalAlign: "middle",
+    color: "green"
+  }
 });
 
 export default withStyles(styles)(Signup);

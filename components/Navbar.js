@@ -7,58 +7,71 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import ActiveLink from "./ActiveLink";
 import { signoutUser } from "../lib/auth";
+import Sidebar from "./Layout/Sidebar";
 
-const Navbar = ({ classes, router, pageProps: { auth } }) => {
-  const { user = {} } = auth || {};
+const Navbar = ({ classes, router, pageProps }) => {
+  // const { user } = auth ;
+  const { user = {} } = pageProps.auth || {};
+
   return (
-    <AppBar
-      className={classes.appBar}
-      position={router.pathname === "/" ? "fixed" : "static"}
-    >
-      <Toolbar>
-        <ActiveLink href="/">
-          {/*<ShareOutlined className={classes.icon} />*/}
-        </ActiveLink>
-        <Typography
-          variant="h5"
-          component="h1"
-          className={classes.toolbarTitle}
-        >
-          <ActiveLink href="/">Contact Manager</ActiveLink>
-        </Typography>
+    <div>
+      {user._id ? (
+        <Sidebar auth={pageProps.auth} />
+      ) : // <AppBar
+      //   className={classes.appBar}
+      //   //   position={router.pathname === "/" ? "fixed" : "static"}
+      // >
+      //   <Toolbar>
+      //     {/* <Typography
+      //       variant="h5"
+      //       component="h1"
+      //       className={classes.toolbarTitle}
+      //     >
+      //       <ActiveLink href="/">Contact Manager</ActiveLink>
+      //     </Typography> */}
 
-        {user._id ? (
-          //Auth navigation
-          <div>
-            <Button>
-              <ActiveLink href={`/profile/${user._id}`}>Profile </ActiveLink>
-            </Button>
-            <Button onClick={signoutUser} variant="outlined">
-              {" "}
-              Sign out{" "}
-            </Button>
-          </div>
-        ) : (
-          //Auth navigation
-          <div>
-            <Button>
-              <ActiveLink href="/auth/login">Sign In </ActiveLink>
-            </Button>
-            <Button>
-              <ActiveLink href="/auth/signup">Sign up </ActiveLink>
-            </Button>
-          </div>
-        )}
-      </Toolbar>
-    </AppBar>
+      //     <div>
+      //       <Button>
+      //         <ActiveLink href="/auth/login">Sign In </ActiveLink>
+      //       </Button>
+      //       <Button>
+      //         <ActiveLink href="/auth/signup">Sign up </ActiveLink>
+      //       </Button>
+      //     </div>
+      //     {/*{user._id ? (*/}
+      //     {/*  //Auth navigation*/}
+      //     {/*  <div>*/}
+      //     {/*    <Button>*/}
+      //     {/*      <ActiveLink href={`/profile/${user._id}`}>Profile </ActiveLink>*/}
+      //     {/*    </Button>*/}
+      //     {/*    <Button onClick={signoutUser} variant="outlined">*/}
+      //     {/*      {" "}*/}
+      //     {/*      Sign out{" "}*/}
+      //     {/*    </Button>*/}
+      //     {/*  </div>*/}
+      //     {/*) : (*/}
+      //     {/*  //Auth navigation*/}
+      //     {/*  <div>*/}
+      //     {/*    <Button>*/}
+      //     {/*      <ActiveLink href="/auth/login">Sign In </ActiveLink>*/}
+      //     {/*    </Button>*/}
+      //     {/*    <Button>*/}
+      //     {/*      <ActiveLink href="/auth/signup">Sign up </ActiveLink>*/}
+      //     {/*    </Button>*/}
+      //     {/*  </div>*/}
+      //     {/*)}*/}
+      //   </Toolbar>
+      // </AppBar>
+      null}
+    </div>
   );
 };
 
 const styles = theme => ({
   appBar: {
     // z-index 1 higher than the fixed drawer in home page to clip it under the navigation
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#1976d2"
+    zIndex: theme.zIndex.drawer + 1
+    // backgroundColor: "#1976d2"
   },
   toolbarTitle: {
     flex: 1

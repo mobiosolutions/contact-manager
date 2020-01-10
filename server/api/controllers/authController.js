@@ -19,7 +19,9 @@ exports.signup = async (req, res) => {
     if (!password) {
       return res.status(204).json({ message: "Password can't be empty" });
     } else if (password.length < 4) {
-      return res.status(400).json({ message: "Password must be atleast 4 character" });
+      return res
+        .status(400)
+        .json({ message: "Password must be atleast 4 character" });
     }
 
     /* check user is exist or not */
@@ -34,12 +36,14 @@ exports.signup = async (req, res) => {
     const user = await new User({ name, email });
     await User.register(user, password, (err, user) => {
       if (err) {
-        return res.status(500).send({message: err.message});
+        return res.status(500).send({ message: err.message });
       }
-      res.status(200).json({username: user.name, message: 'User sign up successfully.'});
+      res
+        .status(200)
+        .json({ username: user.name, message: "User sign up successfully." });
     });
   } catch (err) {
-    res.status(500).json({message: err.message});
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -47,16 +51,16 @@ exports.signup = async (req, res) => {
 exports.signin = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      return res.status(500).json({message: err.message});
+      return res.status(500).json({ message: err.message });
     }
     if (!user) {
-      return res.status(400).json({message: info.message});
+      return res.status(400).json({ message: info.message });
     }
     req.logIn(user, err => {
       if (err) {
-        return res.status(500).json({message: err.message});
+        return res.status(500).json({ message: err.message });
       }
-      res.status(200).json({user: user});
+      res.status(200).json({ user });
     });
   })(req, res, next);
 };
