@@ -47,8 +47,7 @@ const taskSchema = new Schema({
   },
   task_owner_id: {
     type: mongoose.Schema.ObjectId,
-    ref: "User",
-    default: ""
+    ref: "User"
   },
   priority: {
     type: String
