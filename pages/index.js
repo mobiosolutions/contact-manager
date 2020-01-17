@@ -1,88 +1,138 @@
-import React from "react";
-import Head from "next/head";
-import Nav from "../components/nav";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Drawer from "@material-ui/core/Drawer";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import Router from "next/router";
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+// import PostFeed from "../components/index/PostFeed";
+// import UserFeed from "../components/index/UserFeed";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { authInitialProps } from "../lib/auth";
+import Dashboard from "../components/Dashboard/Dashboard";
+import Login from "./auth/login";
+import Sidebar from "../components/Layout/Sidebar";
 
-    <Nav />
+const drawerWidth = 240;
 
-    <div className="hero">
-      <h1 className="title">Welcome to Customer Management!!</h1>
-      <p className="description">
-        To get started, edit <code>pages/index.js</code> and save to reload.
-      </p>
+const Index = ({ classes, auth }) => {
+  return (
+    <main className={classes.root}>
+      {auth.user && auth.user._id ? null : <Login />}
+    </main>
+  );
+};
+const styles = theme => ({
+  root: {
+    paddingTop: theme.spacing.unit * 10,
+    paddingLeft: theme.spacing.unit * 5,
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing.unit * 5
+    }
+  },
+  progressContainer: {
+    height: "80vh"
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
+    color: theme.palette.secondary.light
+  },
+  drawerContainer: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none"
+    }
+  },
+  drawer: {
+    width: 350
+  },
+  drawerPaper: {
+    marginTop: 70,
+    width: 350
+  },
+  fabButton: {
+    margin: theme.spacing.unit * 3
+    // backgroundColor: '#1976d2',
+    // "&:hover": {
+    //     background: "#2176d2"
+    // }
+  },
+  heroContent: {
+    maxWidth: 600,
+    paddingTop: theme.spacing.unit * 8,
+    paddingBottom: theme.spacing.unit * 6,
+    margin: "0 auto"
+  },
+  root: {
+    display: "flex"
+  },
+  grow: {
+    flexGrow: 1
+  },
+  appBar: {
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20
+  },
+  hide: {
+    display: "none"
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0
+  },
+  drawerPaper: {
+    width: drawerWidth
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: "0 8px",
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end"
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    marginLeft: -drawerWidth
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    marginLeft: 0
+  },
+  sectionDesktop: {
+    display: "none",
+    [theme.breakpoints.up("md")]: {
+      display: "flex"
+    }
+  },
+  sectionMobile: {
+    display: "flex",
+    [theme.breakpoints.up("md")]: {
+      display: "none"
+    }
+  }
+});
 
-      <div className="row">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Learn more about Next.js in the documentation.</p>
-        </a>
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Next.js Learn &rarr;</h3>
-          <p>Learn about Next.js by following an interactive tutorial!</p>
-        </a>
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Find other example boilerplates on the Next.js GitHub.</p>
-        </a>
-      </div>
-    </div>
+Index.getInitialProps = authInitialProps();
 
-    <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
-        margin: 0;
-        width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
-      }
-      .title,
-      .description {
-        text-align: center;
-      }
-      .row {
-        max-width: 880px;
-        margin: 80px auto 40px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-      .card {
-        padding: 18px 18px 24px;
-        width: 220px;
-        text-align: left;
-        text-decoration: none;
-        color: #434343;
-        border: 1px solid #9b9b9b;
-      }
-      .card:hover {
-        border-color: #067df7;
-      }
-      .card h3 {
-        margin: 0;
-        color: #067df7;
-        font-size: 18px;
-      }
-      .card p {
-        margin: 0;
-        padding: 12px 0 0;
-        font-size: 13px;
-        color: #333;
-      }
-    `}</style>
-  </div>
-);
-
-export default Home;
+export default withStyles(styles)(Index);
