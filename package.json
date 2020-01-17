@@ -6,13 +6,21 @@
     "dev": "next dev",
     "start:dev": "nodemon server/app.js",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest"
+  },
+  "jest": {
+    "rootDir": "test",
+    "testEnvironment": "node",
+    "globalSetup": "<rootDir>/testkit/start-app.js",
+    "globalTeardown": "<rootDir>/testkit/stop-app.js"
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@material-ui/core": "^3.3.0",
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
+    "clsx": "^1.0.4",
     "compression": "^1.7.3",
     "connect-mongo": "^2.0.1",
     "date-fns": "^1.29.0",
@@ -39,6 +47,13 @@
     "validator": "^10.8.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "@babel/core": "7.3.3",
+    "babel-jest": "24.1.0",
+    "enzyme": "3.9.0",
+    "enzyme-adapter-react-16": "1.9.1",
+    "jest": "24.1.0",
+    "react-test-renderer": "16.8.2",
+    "zombie": "6.1.4",
+    "nodemon": "1.18.4"
   }
 }
