@@ -1,9 +1,11 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Drawer from "@material-ui/core/Drawer";
 import Typography from "@material-ui/core/Typography";
+import classNames from "classnames";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Router from "next/router";
+import { useState } from "react";
 
 // import PostFeed from "../components/index/PostFeed";
 // import UserFeed from "../components/index/UserFeed";
@@ -11,14 +13,31 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { authInitialProps } from "../lib/auth";
 import Dashboard from "../components/Dashboard/Dashboard";
 import Login from "./auth/login";
-import Sidebar from "../components/Layout/Sidebar";
+import Layout from "../components/Layout/Layout";
+import Sidebar from "../components/Common/Sidebar";
+import Company from "./company/index";
 
 const drawerWidth = 240;
 
 const Index = ({ classes, auth }) => {
+  const [open, setOpen] = useState(true);
+
   return (
     <main className={classes.root}>
-      {auth.user && auth.user._id ? null : <Login />}
+      {auth.user && auth.user._id ? (
+        //Auth user page
+        <main
+          className={classNames(classes.content, {
+            [classes.contentShift]: open
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          <Dashboard open={open} auth={auth} />
+        </main>
+      ) : (
+        //unAuth login page
+        <Login />
+      )}
     </main>
   );
 };
