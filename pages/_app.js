@@ -10,9 +10,9 @@ import NProgress from "next-nprogress/component";
 
 import getPageContext from "../lib/getPageContext";
 import Toolbar from "@material-ui/core/Toolbar";
-import Sidebar from "../components/Layout/Sidebar";
 import AppBar from "@material-ui/core/AppBar";
 import Navbar from "../components/Navbar";
+import Layout from "../components/Layout/Layout";
 
 class MyApp extends App {
   constructor(props) {
@@ -51,7 +51,7 @@ class MyApp extends App {
             <CssBaseline />
             {/*<Navbar {...this.props} />*/}
 
-            <Navbar {...this.props} />
+            <Layout {...this.props} />
             {/* Pass pageContext to the _document though the renderPage enhancer
                 to render collected styles on server side. */}
             <Component pageContext={this.pageContext} {...pageProps} />

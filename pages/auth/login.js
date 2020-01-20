@@ -129,6 +129,7 @@ const styles = theme => ({
     display: "block",
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
+    marginTop: 10,
     [theme.breakpoints.up("md")]: {
       width: 400,
       marginLeft: "auto",
@@ -136,7 +137,7 @@ const styles = theme => ({
     }
   },
   paper: {
-    marginTop: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 12,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
