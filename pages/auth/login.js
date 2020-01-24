@@ -48,7 +48,6 @@ class Login extends React.Component {
   };
 
   showError = err => {
-    console.log(err);
     const error = (err.response && err.response.data.message) || err.message;
     this.setState({ error, openError: true, isLoading: false });
   };

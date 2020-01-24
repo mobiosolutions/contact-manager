@@ -72,11 +72,8 @@ const Dashboard = props => {
   const { classes, open } = props;
 
   return (
-    <div>
-      <Typography variant="h4" component="h1" className={classes.title}>
-        Dashboard Page
-      </Typography>{" "}
-      <br />
+    <div className={classes.drawerHeader}>
+
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus

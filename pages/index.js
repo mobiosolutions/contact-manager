@@ -31,7 +31,6 @@ const Index = ({ classes, auth }) => {
             [classes.contentShift]: open
           })}
         >
-          <div className={classes.drawerHeader} />
           <Dashboard open={open} auth={auth} />
         </main>
       ) : (
@@ -61,13 +60,6 @@ const styles = theme => ({
       display: "none"
     }
   },
-  drawer: {
-    width: 350
-  },
-  drawerPaper: {
-    marginTop: 70,
-    width: 350
-  },
   fabButton: {
     margin: theme.spacing.unit * 3
     // backgroundColor: '#1976d2',
@@ -80,9 +72,6 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 8,
     paddingBottom: theme.spacing.unit * 6,
     margin: "0 auto"
-  },
-  root: {
-    display: "flex"
   },
   grow: {
     flexGrow: 1

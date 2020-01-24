@@ -62,7 +62,7 @@ class PersistentDrawerLeft extends React.Component {
 
   render() {
     const { classes, theme, pageProps } = this.props;
-    console.log("layout", this.props);
+
 
     const { user = {} } = pageProps.auth || {};
     const { open, anchorEl, mobileMoreAnchorEl, tab } = this.state;

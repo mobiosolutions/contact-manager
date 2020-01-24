@@ -19,51 +19,6 @@ const Navbar = ({ classes, router, pageProps }) => {
       {user._id ? (
         <Layout auth={pageProps.auth} />
       ) : (
-        // <AppBar
-        //   className={classes.appBar}
-        //   //   position={router.pathname === "/" ? "fixed" : "static"}
-        // >
-        //   <Toolbar>
-        //     {/* <Typography
-        //       variant="h5"
-        //       component="h1"
-        //       className={classes.toolbarTitle}
-        //     >
-        //       <ActiveLink href="/">Contact Manager</ActiveLink>
-        //     </Typography> */}
-
-        //     <div>
-        //       <Button>
-        //         <ActiveLink href="/auth/login">Sign In </ActiveLink>
-        //       </Button>
-        //       <Button>
-        //         <ActiveLink href="/auth/signup">Sign up </ActiveLink>
-        //       </Button>
-        //     </div>
-        //     {/*{user._id ? (*/}
-        //     {/*  //Auth navigation*/}
-        //     {/*  <div>*/}
-        //     {/*    <Button>*/}
-        //     {/*      <ActiveLink href={`/profile/${user._id}`}>Profile </ActiveLink>*/}
-        //     {/*    </Button>*/}
-        //     {/*    <Button onClick={signoutUser} variant="outlined">*/}
-        //     {/*      {" "}*/}
-        //     {/*      Sign out{" "}*/}
-        //     {/*    </Button>*/}
-        //     {/*  </div>*/}
-        //     {/*) : (*/}
-        //     {/*  //Auth navigation*/}
-        //     {/*  <div>*/}
-        //     {/*    <Button>*/}
-        //     {/*      <ActiveLink href="/auth/login">Sign In </ActiveLink>*/}
-        //     {/*    </Button>*/}
-        //     {/*    <Button>*/}
-        //     {/*      <ActiveLink href="/auth/signup">Sign up </ActiveLink>*/}
-        //     {/*    </Button>*/}
-        //     {/*  </div>*/}
-        //     {/*)}*/}
-        //   </Toolbar>
-        // </AppBar>
         <Login />
       )}
     </div>

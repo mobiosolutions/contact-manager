@@ -68,7 +68,6 @@ const Header = props => {
     open,
     classes
   } = props;
-  console.log("hello", user);
   return (
     <AppBar
       position="fixed"

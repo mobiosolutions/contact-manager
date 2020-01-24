@@ -5,6 +5,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DomainIcon from "@material-ui/icons/Domain";
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import ContactsIcon from "@material-ui/icons/Contacts";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
@@ -61,6 +62,14 @@ const Sidebar = props => {
       <List>
         <ListItem button>
           <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ActiveLink href="/">
+            <ListItemText primary="Dashboard" />
+          </ActiveLink>
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
             <DomainIcon />
           </ListItemIcon>
           <ActiveLink href="/company">
@@ -79,7 +88,7 @@ const Sidebar = props => {
           <ListItemIcon>
             <AttachMoneyIcon />
           </ListItemIcon>
-          <ActiveLink href="/deal">
+          <ActiveLink href="/deals">
             <ListItemText primary="Deals" />
           </ActiveLink>
         </ListItem>
