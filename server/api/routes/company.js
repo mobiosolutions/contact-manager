@@ -17,7 +17,7 @@ Router.get(
   authController.checkAuth,
   companyController.getCompanyById
 );
-Router.post(
+Router.put(
   "/create",
   authController.checkAuth,
   companyController.createCompany

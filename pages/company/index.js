@@ -1,449 +1,359 @@
 import Paper from "@material-ui/core/Paper";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Divider from "@material-ui/core/Divider";
-import Edit from "@material-ui/icons/Edit";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Link from "next/link";
-import Button from "@material-ui/core/Button";
-import moment from "moment";
 
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
+import AddIcon from '@material-ui/icons/Add';
+import { authInitialProps } from "../../lib/auth";
+import {getCompanyList} from "../../lib/api";
+import ActiveLink from "../../components/ActiveLink";
 
-import TextField from '@material-ui/core/TextField';
-import CloudUpload from "@material-ui/icons/CloudUpload";
-import FaceTwoTone from "@material-ui/icons/FaceTwoTone";
-// import ProfileTabs from "../components/profile/ProfileTabs";
-// import DeleteUser from "../components/profile/DeleteUser";
-// import FollowUser from "../components/profile/FollowUser";
-import {authInitialProps, signupUser} from "../../lib/auth";
-import {
-  getUser
-  //   deletePost,
-  //   likePost,
-  //   unlikePost,
-  //   addComment,
-  //   deleteComment
-} from "../../lib/api";
-
-class Index extends React.Component {
-  state = {
-      user: null,
-      isAuth: false,
-      name: "",
-      website_url: "",
-      description: "",
-      phone_no: "",
-      tags: "",
-      fax: "",
-      avatar: "",
-      avatarPreview: "",
-      error: "",
-      updatedUser: null,
-      openError: false,
-      openSuccess: false,
-      isSaving: false,
-      isLoading: true
-    // isFollowing: false,
-    // isDeletingPost: false
-  };
-
-  componentDidMount() {
-    // const { userId, auth } = this.props;
-    // getUser(userId)
-    //   .then(async user => {
-    //     console.log(user);
-    //     const isAuth = auth.user._id === userId;
-    //     this.setState({
-    //       user,
-    //       //   posts,
-    //       isAuth,
-    //       //   isFollowing,
-    //       isLoading: false
-    //     });
-    //   })
-    //   .catch(err => console.error(err));
-  }
-
-    handleChange = event => {
-
-        let inputValue;
-
-        if (event.target.name === "avatar") {
-            inputValue = event.target.files[0];
-            this.setState({avatarPreview: this.createPreviewImage(inputValue)})
-        } else {
-            inputValue = event.target.value;
-        }
-        // this.userData.set(event.target.name, inputValue);
-        this.setState({[event.target.name]: inputValue});
-
-    }
-
-
-    handleSubmit = event => {
-        event.preventDefault();
-        this.setState({isSaving: true})
-
-        createCompany(this.state._id, this.userData)
-            .then(createCompany => {
-                this.setState({createCompany, openSuccess: true});
-                setTimeout(() => Router.push(`/company`), 6000)
-            })
-            .catch(this.showError);
-
-    }
-
-    createPreviewImage = file => URL.createObjectURL(file);
-
-    showError = err => {
-
-        const error = err.response && err.response.data || err.message;
-        this.setState({error, openError: true, isSaving: false});
-
-
-    }
-
-  render() {
-    const { classes, auth } = this.props;
-    const { avatar,avatarPreview} = this.state;
-    return (
-      <Paper className={classes.root} elevation={4}>
-        <Typography
-          variant="h4"
-          component="h1"
-          align="center"
-          className={classes.title}
-          gutterBottom
-        >
-            Add Company
-        </Typography>
-
-          <form onSubmit={this.handleSubmit} className={classes.container} autoComplete="off">
-
-        <TextField
-            id="outlined-email-input"
-            label="Name"
-            className={classes.textField}
-            type="text"
-            name="name"
-            autoComplete="name"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-website-input"
-            label="Website"
-            className={classes.textField}
-            type="text"
-            name="website"
-            autoComplete="website"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-description-input"
-            label="Description"
-            className={classes.textField}
-            type="text"
-            name="description"
-            autoComplete="description"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-phone-input"
-            label="Phone"
-            className={classes.textField}
-            type="text"
-            name="phone"
-            autoComplete="phone"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-tags-input"
-            label="Tags"
-            className={classes.textField}
-            type="text"
-            name="tags"
-            autoComplete="tags"
-            margin="normal"
-            variant="outlined"
-        />
-              <Avatar src={avatarPreview || avatar} className={classes.bigAvatar}/>
-              <input
-                  type="file"
-                  name="avatar"
-                  id="avatar"
-                  accept="image/*"
-                  onChange={this.handleChange}
-                  className={classes.input}
-              />
-              <label htmlFor="avatar" className={classes.uploadButton}>
-                  <Button variant="contained" color="secondary" component="span">
-                      Upload Image <CloudUpload/>
-                  </Button>
-              </label>
-              <span className={classes.filename}>{avatar && avatar.name}</span>
-
-          <Typography
-              variant="h4"
-              component="h1" gutterBottom >
-              Address
-          </Typography>
-          <Divider variant="middle" />
-
-          <Typography
-              variant="h6" gutterBottom>
-              Billing Address
-          </Typography>
-        <TextField
-            id="outlined-billing_street-input"
-            label="Billing Street"
-            className={classes.textField}
-            type="text"
-            name="billing_street"
-            autoComplete="billing_street"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-billing_city-input"
-            label="Billing City"
-            className={classes.textField}
-            type="text"
-            name="billing_city"
-            autoComplete="billing_city"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-billing_state-input"
-            label="Billing State"
-            className={classes.textField}
-            type="text"
-            name="billing_state"
-            autoComplete="billing_state"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-billing_country-input"
-            label="Billing Country"
-            className={classes.textField}
-            type="text"
-            name="billing_country"
-            autoComplete="billing_country"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-billing_zip_code-input"
-            label="Billing Zip Code"
-            className={classes.textField}
-            type="text"
-            name="billing_zip_code"
-            autoComplete="billing_zip_code"
-            margin="normal"
-            variant="outlined"
-        />
-          <Typography
-              variant="h6" gutterBottom>
-              Shipping Address
-          </Typography>
-        <TextField
-            id="outlined-billing_street-input"
-            label="Shipping Street"
-            className={classes.textField}
-            type="text"
-            name="shipping_street"
-            autoComplete="shipping_street"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-shipping_city-input"
-            label="Shipping City"
-            className={classes.textField}
-            type="text"
-            name="shipping_city"
-            autoComplete="shipping_city"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-shipping_state-input"
-            label="Shipping State"
-            className={classes.textField}
-            type="text"
-            name="shipping_state"
-            autoComplete="shipping_state"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-shipping_country-input"
-            label="Shipping Country"
-            className={classes.textField}
-            type="text"
-            name="shipping_country"
-            autoComplete="shipping_country"
-            margin="normal"
-            variant="outlined"
-        />
-        <TextField
-            id="outlined-shipping_zip_code-input"
-            label="Shipping Zip Code"
-            className={classes.textField}
-            type="text"
-            name="shipping_zip_code"
-            autoComplete="shipping_zip_code"
-            margin="normal"
-            variant="outlined"
-        />
-
-        <Button  className={classes.buttonStyle}
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-              >
-                  Save
-              </Button>
-
-              {/*<Button*/}
-              {/*    type="submit"*/}
-              {/*    variant="contained"*/}
-              {/*    color="primary"*/}
-              {/*>*/}
-              {/*    Cancel*/}
-              {/*</Button>*/}
-
-          </form>
-
-
-
-
-        {/* {isLoading ? (
-          <div className={classes.progressContainer}>
-            <CircularProgress
-              className={classes.progress}
-              size={55}
-              thickness={5}
-            />
-          </div>
-        ) : (
-          <List dense>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar src={user.avatar} className={classes.bigAvatar} />
-              </ListItemAvatar>
-              <ListItemText primary={user.name} secondary={user.email} />
-              {/* Auth - Edit Buttons / UnAuth - follow Buttons */}
-        {/* {isAuth ? (
-                <ListItemSecondaryAction>
-                  <Link href="/edit-profile">
-                    <a>
-                      <IconButton color="primary">
-                        <Edit />
-                      </IconButton>
-                    </a>
-                  </Link>
-                  <DeleteUser user={user} />
-                </ListItemSecondaryAction>
-              ) : (
-                <FollowUser
-                  isFollowing={isFollowing}
-                  toggleFollow={this.toggleFollow}
-                />
-              )}
-            </ListItem>
-            <Divider />
-            <ListItem>
-              <ListItemText
-                primary={user.about}
-                secondary={`Joined: ${moment(user.createdAt).format("LLLL")}`}
-              />
-            </ListItem> */}{" "}
-
-        {/* Display User's Posts, Following, Followers */}
-        {/* <ProfileTabs
-              auth={auth}
-              posts={posts}
-              user={user}
-              isDeletingPost={isDeletingPost}
-              handleDeletePost={this.handleDeletePost}
-              handleToggleLike={this.handleToggleLike}
-              handleAddComment={this.handleAddComment}
-              handleDeleteComment={this.handleDeleteComment}
-            />
-          </List>
-        )} */}
-      </Paper>
-    );
-  }
+let counter = 0;
+function createData(name, website_url, phone_no, billing_country, shipping_street) {
+    counter += 1;
+    return { id: counter, name, website_url, phone_no, billing_country, shipping_street };
 }
 
-const styles = theme => ({
-  root: {
-    padding: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 18,
-    margin: "auto",
-    [theme.breakpoints.up("sm")]: {
-      width: 1300
+function desc(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
     }
-  },
-    uploadButton: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: "0.25em"
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+    return 0;
+}
+
+function stableSort(array, cmp) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+        const order = cmp(a[0], b[0]);
+        if (order !== 0) return order;
+        return a[1] - b[1];
+    });
+    return stabilizedThis.map(el => el[0]);
+}
+
+function getSorting(order, orderBy) {
+    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
+}
+
+const rows = [
+    { id: 'name', numeric: false, disablePadding: true, label: 'Company Name' },
+    { id: 'website_url', numeric: true, disablePadding: false, label: 'Website' },
+    { id: 'phone_no', numeric: true, disablePadding: false, label: 'Phone' },
+    { id: 'billing_country', numeric: true, disablePadding: false, label: 'Billing Country' },
+    { id: 'shipping_street', numeric: true, disablePadding: false, label: 'Shipping Street' },
+];
+
+class EnhancedTableHead extends React.Component {
+    createSortHandler = property => event => {
+        this.props.onRequestSort(event, property);
+    };
+
+    render() {
+        const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
+
+        return (
+            <TableHead>
+                <TableRow>
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                        />
+                    </TableCell>
+                    {rows.map(
+                        row => (
+                            <TableCell
+                                key={row.id}
+                                align={row.numeric ? 'right' : 'left'}
+                                padding={row.disablePadding ? 'none' : 'default'}
+                                sortDirection={orderBy === row.id ? order : false}
+                            >
+                                <Tooltip
+                                    title="Sort"
+                                    placement={row.numeric ? 'bottom-end' : 'bottom-start'}
+                                    enterDelay={300}
+                                >
+                                    <TableSortLabel
+                                        active={orderBy === row.id}
+                                        direction={order}
+                                        onClick={this.createSortHandler(row.id)}
+                                    >
+                                        {row.label}
+                                    </TableSortLabel>
+                                </Tooltip>
+                            </TableCell>
+                        ),
+                        this,
+                    )}
+                </TableRow>
+            </TableHead>
+        );
+    }
+}
+
+EnhancedTableHead.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    order: PropTypes.string.isRequired,
+    orderBy: PropTypes.string.isRequired,
+    rowCount: PropTypes.number.isRequired,
+};
+
+const toolbarStyles = theme => ({
+    root: {
+        paddingRight: theme.spacing.unit,
     },
-  title: {
-    color: theme.palette.primary.main
-  },
-  progress: {
-    margin: theme.spacing.unit * 2
-  },
-  progressContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column"
-  },
-  bigAvatar: {
-      marginLeft: "47%",
-      marginRight: "47%",
-      width: 60,
-      height: 60,
-      margin: 10
-  },
-    filename: {
-      width: "44%",
-      marginLeft: "43%",
-      marginRight: "20%",
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-  },
-  buttonStyle: {
-    width: "40%",
-    marginLeft: "30%",
-    marginRight: "30%",
-    marginTop: "20px"
-  },
-    input: {
-        display: "none"
-    }
+    highlight:
+        theme.palette.type === 'light'
+            ? {
+                color: theme.palette.secondary.main,
+                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+            }
+            : {
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.secondary.dark,
+            },
+    spacer: {
+        flex: '1 1 100%',
+    },
+    actions: {
+        color: theme.palette.text.secondary,
+    },
+    title: {
+        flex: '0 0 auto',
+    },
 });
 
-Index.getInitialProps = authInitialProps(true);
+let EnhancedTableToolbar = props => {
+    const { numSelected, classes } = props;
 
+    return (
+        <Toolbar
+            className={classNames(classes.root, {
+                [classes.highlight]: numSelected > 0,
+            })}
+        >
+            <div className={classes.title}>
+                {numSelected > 0 ? (
+                    <Typography color="inherit" variant="subtitle1">
+                        {numSelected} selected
+                    </Typography>
+                ) : (
+                    <Typography variant="h6" id="tableTitle">
+                        All Companies
+                    </Typography>
+                )}
+            </div>
+            <div className={classes.spacer} />
+            <div className={classes.actions}>
+                {numSelected > 0 ? (
+                    <Tooltip title="Delete">
+                        <IconButton aria-label="Delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                ) : (
+                    <Tooltip title="Add Company">
+                        <ActiveLink href="/company/create"> <IconButton aria-label="Add Company">
+                            <AddIcon />
+                        </IconButton> </ActiveLink>
+                    </Tooltip>
+                )}
+            </div>
+        </Toolbar>
+    );
+};
+
+EnhancedTableToolbar.propTypes = {
+    classes: PropTypes.object.isRequired,
+    numSelected: PropTypes.number.isRequired,
+};
+
+EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
+
+const styles = theme => ({
+    root: {
+        padding: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 18,
+        margin: "auto",
+        [theme.breakpoints.up("sm")]: {
+            width: 1300
+        }
+    },
+    table: {
+        minWidth: 1020,
+    },
+    tableWrapper: {
+        overflowX: 'auto',
+    },
+});
+
+class Index extends React.Component {
+    state = {
+        order: 'asc',
+        orderBy: 'website_url',
+        selected: [],
+        data: [],
+        page: 0,
+        rowsPerPage: 5,
+    };
+
+    componentDidMount() {
+        this.getCompnies()
+    }
+
+    getCompnies = () => {
+
+        getCompanyList().then(data => this.setState({data}));
+
+    }
+
+    handleRequestSort = (event, property) => {
+        const orderBy = property;
+        let order = 'desc';
+
+        if (this.state.orderBy === property && this.state.order === 'desc') {
+            order = 'asc';
+        }
+
+        this.setState({ order, orderBy });
+    };
+
+    handleSelectAllClick = event => {
+        if (event.target.checked) {
+            this.setState(state => ({ selected: state.data.map(n => n.id) }));
+            return;
+        }
+        this.setState({ selected: [] });
+    };
+
+    handleClick = (event, id) => {
+        const { selected } = this.state;
+        const selectedIndex = selected.indexOf(id);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, id);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
+        }
+
+        this.setState({ selected: newSelected });
+    };
+
+    handleChangePage = (event, page) => {
+        this.setState({ page });
+    };
+
+    handleChangeRowsPerPage = event => {
+        this.setState({ rowsPerPage: event.target.value });
+    };
+
+    isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+    render() {
+        const { classes } = this.props;
+        const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+
+        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+        return (
+            <Paper className={classes.root}>
+                <EnhancedTableToolbar numSelected={selected.length} />
+                <div className={classes.tableWrapper}>
+                    <Table className={classes.table} aria-labelledby="tableTitle">
+                        <EnhancedTableHead
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={this.handleSelectAllClick}
+                            onRequestSort={this.handleRequestSort}
+                            rowCount={data.length}
+                        />
+                        <TableBody>
+                            {stableSort(data, getSorting(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map(n => {
+                                    const isSelected = this.isSelected(n.id);
+                                    return (
+                                        <TableRow
+                                            hover
+                                            onClick={event => this.handleClick(event, n.id)}
+                                            role="checkbox"
+                                            aria-checked={isSelected}
+                                            tabIndex={-1}
+                                            key={n.id}
+                                            selected={isSelected}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox checked={isSelected} />
+                                            </TableCell>
+                                            <TableCell component="th" scope="row" padding="none">
+                                                {n.name}
+                                            </TableCell>
+                                            <TableCell align="right">{n.website_url}</TableCell>
+                                            <TableCell align="right">{n.phone_no}</TableCell>
+                                            <TableCell align="right">{n.address.billing_address.billing_country}</TableCell>
+                                            <TableCell align="right">{n.address.shipping_address.shipping_street}</TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 49 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    backIconButtonProps={{
+                        'aria-label': 'Previous Page',
+                    }}
+                    nextIconButtonProps={{
+                        'aria-label': 'Next Page',
+                    }}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+            </Paper>
+        );
+    }
+}
+
+Index.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+Index.getInitialProps = authInitialProps(true);
 export default withStyles(styles)(Index);

@@ -21,6 +21,7 @@ exports.getAllCompanies = async (req, res) => {
 exports.createCompany = async (req, res) => {
   try {
     const data = req.body;
+    console.log('data',data);
 
     /* check company already exist or not by name */
     const existedCompany = await Company.findOne({ name: data.name });
@@ -36,7 +37,9 @@ exports.createCompany = async (req, res) => {
       data.user_id = req.user._id;
     }
     const companyData = new Company(req.body);
+    console.log('companyData',companyData);
     const company = await companyData.save();
+    console.log('companyDatacompany',company);
 
     res.status(200).json({ company: company });
   } catch (err) {
